@@ -1,8 +1,8 @@
-# Deep embedding of sequence and similarity comparision
+# Deep embedding of sequence and similarity comparison
 
-Training deep learning models for the purpers of sequence similarity comparision, and then use the embedding layers of the similarity model to represent the sequences
+Training deep learning models for the purpose of sequence similarity comparison, and then use the embedding layers of the similarity model to represent the sequences
 
-## Instillication 
+## Installation 
 
 ```bash
 git clone https://github.com/gaoyuanliang/sequence_embedding_and_similarity.git
@@ -16,7 +16,7 @@ pip3 install -r requirements.txt
 
 ### Preparing the training data
 
-to use the deep embedding and similarity comparision functions, firstly import the packages
+to use the deep embedding and similarity comparison functions, firstly import the packages
 
 ```python
 
@@ -45,7 +45,7 @@ sqlContext.createDataFrame([
 sqlContext.read.json('example.json').show()
 ```
 
-you will see how the input tabel looks like
+you will see how the input table looks like
 
 ```
 +-----------+-----+----------+--------+----------+--------+
@@ -61,9 +61,9 @@ you will see how the input tabel looks like
 +-----------+-----+----------+--------+----------+--------+
 ```
 
-here since we want to compare the similarity of two sequence, we have the columns of the first sequence, x_location and x_time, and the columns of the seconde sequence, y_location and y_time, and their similarity column, label. Each row is a pair of sequences, x and y.
+here since we want to compare the similarity of two sequences, we have the columns of the first sequence, x_location and x_time, and the columns of the second sequence, y_location and y_time, and their similarity column, label. Each row is a pair of sequences, x and y.
 
-Then we conver the data tabel into npy files to fit to the deep learning input formats. For the sequence data, each timestamp is composed of two attributes, time and location, so we want to concatnate their embeddings for the convolutional layers. To this end, set the cnn layers parameters as 
+Then we convert the data table into npy files to fit the deep learning input formats. For the sequence data, each timestamp is composed of two attributes, time and location, so we want to concatenate their embeddings for the convolutional layers. To this end, set the CNN layers parameters as 
 
 ```python 
 
@@ -91,7 +91,7 @@ training_data = behaviour_json2npy(
   
   ```
   
-the training data attributs looks like 
+the training data attributes looks like 
   
   ```python
  
@@ -192,7 +192,7 @@ it looks like
 +-----------+----------+--------+
 ```
 
-re-orgnize the data according to the input data format
+re-organize the data according to the input data format
 
 ```python
 test_data = behaviour_json2npy(
@@ -208,7 +208,7 @@ x = building_x_from_input_dataformat_and_npy(
 	input_data_attributes = test_data)
 ```
 
-use the embedding model to conver the x to embedding vectors
+use the embedding model to convert the x to embedding vectors
 
 ```python
 y_vector = emb_model.predict(x)
