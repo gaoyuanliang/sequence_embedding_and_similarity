@@ -181,3 +181,19 @@ sqlContext.createDataFrame([
 ],
 ['document_id','x_time', 'x_location']).write.mode('Overwrite').json('example1.json')
 ```
+
+it looks like 
+
+```
++-----------+----------+--------+
+|document_id|x_location|  x_time|
++-----------+----------+--------+
+|          0|  [l1, l2]|[t1, t2]|
+|          1|  [l1, l3]|[t1, t3]|
+|          2|  [l1, l4]|[t1, t4]|
+|          3|  [l2, l3]|[t2, t3]|
+|          4|      [l1]|    [t1]|
+|          5|  [l4, l3]|[t4, t3]|
+|          6|  [l1, l2]|[t1, t2]|
++-----------+----------+--------+
+```
