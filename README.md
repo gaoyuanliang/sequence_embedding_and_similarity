@@ -83,7 +83,7 @@ embedding_dim = {'x_time':20, 'x_location':300, 'y_time':20, 'y_location':300}
 
 training_data = behaviour_json2npy(
 	input_json = 'example.json',
-	output_npy_file_name_prefix = 'trip',
+	output_npy_file_name_prefix = 'x',
 	sqlContext = sqlContext,
 	padding_length = padding_length,
 	vacabulary_size = vacabulary_size,
@@ -192,12 +192,12 @@ it looks like
 +-----------+----------+--------+
 ```
 
-reorgnize the data according to the input data format
+re-orgnize the data according to the input data format
 
-```
+```python
 test_data = behaviour_json2npy(
 	input_json = 'example1.json',
-	output_npy_file_name_prefix = 'emb',
+	output_npy_file_name_prefix = 'x1',
 	sqlContext = sqlContext,
 	padding_length = padding_length,
 	vacabulary_size = vacabulary_size,
