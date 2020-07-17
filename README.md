@@ -2,6 +2,8 @@
 
 Training deep learning models for the purpose of sequence similarity comparison, and then use the embedding layers of the similarity model to represent the sequences
 
+<img src="https://github.com/gaoyuanliang/sequence_embedding_and_similarity/raw/master/WeChat%20Screenshot_20200717164438.png" width="600">
+
 ## Installation 
 
 ```bash
