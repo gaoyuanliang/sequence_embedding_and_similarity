@@ -80,3 +80,16 @@ training_data = behaviour_json2npy(
 	embedding_dim = embedding_dim)
   
   ```
+  
+  the training data attributs looks like 
+  
+  ```python
+ 
+ training_data = [{'atrribute_name': 'document_id', 'npy_file': 'trip_document_id.npy'}, 
+{'atrribute_name': 'label', 'npy_file': 'trip_label.npy'}, 
+{'vacabulary_size': 100, 'atrribute_name': 'x_location', 'embedding_dim': 300, 'npy_file': 'trip_x_location.npy', 'padding_length': 5}, 
+{'vacabulary_size': 24, 'atrribute_name': 'x_time', 'embedding_dim': 20, 'npy_file': 'trip_x_time.npy', 'padding_length': 5}, 
+{'vacabulary_size': 100, 'atrribute_name': 'y_location', 'embedding_dim': 300, 'npy_file': 'trip_y_location.npy', 'padding_length': 5}, 
+{'vacabulary_size': 24, 'atrribute_name': 'y_time', 'embedding_dim': 20, 'npy_file': 'trip_y_time.npy', 'padding_length': 5}]
+
+```
