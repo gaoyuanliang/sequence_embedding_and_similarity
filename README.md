@@ -47,7 +47,7 @@ sqlContext.read.json('example.json').show()
 
 you will see how the input tabel looks like
 
-```python
+```
 +-----------+-----+----------+--------+----------+--------+
 |document_id|label|x_location|  x_time|y_location|  y_time|
 +-----------+-----+----------+--------+----------+--------+
