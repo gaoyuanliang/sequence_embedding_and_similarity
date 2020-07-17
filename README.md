@@ -2,6 +2,16 @@
 
 Training deep learning models for the purpers of sequence similarity comparision, and then use the embedding layers of the similarity model to represent the sequences
 
+## Instillication 
+
+```bash
+git clone https://github.com/gaoyuanliang/sequence_embedding_and_similarity.git
+
+cd sequence_embedding_and_similarity
+
+pip3 install -r requirements.txt
+```
+
 ## Training the similarity deep model
 
 ### Preparing the training data
