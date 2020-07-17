@@ -91,7 +91,7 @@ training_data = behaviour_json2npy(
   
   ```
   
-  the training data attributs looks like 
+the training data attributs looks like 
   
   ```python
  
@@ -106,7 +106,7 @@ training_data = behaviour_json2npy(
 
 ```
 
-train the similarity model 
+### train the similarity model 
 
 ```python
 
