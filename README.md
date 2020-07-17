@@ -2,6 +2,8 @@
 
 Behaviour embedding, categorization, regression, and similarity comparision
 
+## Training the similarity deep learning
+
 to use the deep embedding and similarity comparision functions, firstly import the packages
 
 ```python
