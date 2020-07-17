@@ -95,3 +95,28 @@ training_data = behaviour_json2npy(
 ]
 
 ```
+
+train the similarity model 
+
+```python
+
+x_behaviour_attributes = ['x_time', 'x_location']
+y_behaviour_attributes = ['y_time', 'y_location']
+
+model, x_input_data_format, y_input_data_format = train_behaviour_similary_model(
+	training_data,
+	x_behaviour_attributes,
+	y_behaviour_attributes,
+	cnn_layers,
+	sqlContext,
+	epochs = 1000,
+	gpus = None,
+	batch_size = 500,
+	model_file = 'model_similary.h5py',
+	model_structure_json_file = 'model_similary.json',
+	prediction_json = 'similary.json',
+	dropout_rate = 0.3,
+	cnn_layer_num = 1)
+
+sqlContext.read.json('similary.json').show()
+```
