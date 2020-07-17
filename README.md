@@ -152,3 +152,16 @@ check the similarity prediction results of the training set
 |       3456|[0.0]|[0.02453222498297...|
 +-----------+-----+--------------------+
 ```
+
+build the embedding model from the trained similarity model
+
+
+```python
+
+emb_model = building_embedding_layer_from_pretrained_model(
+	model_weight_file = 'model_similary.h5py',
+	model_structure_json_file = 'model_similary.json',
+	embedding_layer_name = 'x_behaviour_embedding_model',
+	emb_model_structure_json = 'emb_model.json',
+	emb_model_weight_file = 'emb_model.h5py')
+```
