@@ -219,3 +219,13 @@ use the embedding model to conver the x to embedding vectors
 ```python
 y_vector = emb_model.predict(x)
 ```
+
+
+calculate the similarities
+
+```python
+numpy.inner(y_vector[0], y_vector[1])
+numpy.inner(y_vector[0], y_vector[4])
+numpy.inner(y_vector[0], y_vector[5])
+numpy.inner(y_vector[0], y_vector[6])
+```
