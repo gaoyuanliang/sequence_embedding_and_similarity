@@ -231,3 +231,5 @@ calculate the similarities
 ## TODO
 
 online updating of the similarity model 
+
+building a api for the embdding of a sequence, lists of attributs of timestamps 
