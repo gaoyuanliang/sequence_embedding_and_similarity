@@ -139,6 +139,17 @@ def build_behaviour_embedding_model(
 	model = Model(inputs=layer_input, outputs=o)
 	return model, input_data_inf
 
+
+def building_x_from_input_dataformat_and_npy(
+	input_format,
+	input_data_attributes):
+	x = []
+	for a in input_format:
+		for b in input_data_attributes:
+			if a['atrribute_name'] == b['atrribute_name']:
+				x.append(numpy.load(b['npy_file']))
+	return x
+
 #########regression#########
 
 def build_behaviour_regression_model(
