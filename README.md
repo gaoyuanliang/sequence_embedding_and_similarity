@@ -164,3 +164,20 @@ emb_model = building_embedding_layer_from_pretrained_model(
 	emb_model_structure_json = 'emb_model.json',
 	emb_model_weight_file = 'emb_model.h5py')
 ```
+
+## Test the embedding results
+
+building the test data set, but this time each row only have one sequence with attributes of time and location
+
+```python
+sqlContext.createDataFrame([
+('0', ['t1','t2'],['l1','l2']),
+('1', ['t1','t3'],['l1','l3']),
+('2', ['t1','t4'],['l1','l4']),
+('3', ['t2','t3'],['l2','l3']),
+('4', ['t1'],['l1']),
+('5', ['t4','t3'],['l4','l3']),
+('6', ['t1','t2'],['l1','l2']),
+],
+['document_id','x_time', 'x_location']).write.mode('Overwrite').json('example1.json')
+```
