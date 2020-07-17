@@ -96,6 +96,9 @@ sqlContext.createDataFrame([
 ],
 ['document_id','x_time', 'x_location']).write.mode('Overwrite').json('example1.json')
 
+sqlContext.read.json('example1.json').show()
+
+
 test_data = behaviour_json2npy(
 	input_json = 'example1.json',
 	output_npy_file_name_prefix = 'emb',
