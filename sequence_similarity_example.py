@@ -38,7 +38,7 @@ cnn_layers = [
 
 training_data = behaviour_json2npy(
 	input_json = 'example.json',
-	output_npy_file_name_prefix = 'trip',
+	output_npy_file_name_prefix = 'x',
 	sqlContext = sqlContext,
 	padding_length = padding_length,
 	vacabulary_size = vacabulary_size,
@@ -99,7 +99,7 @@ sqlContext.read.json('example1.json').show()
 
 test_data = behaviour_json2npy(
 	input_json = 'example1.json',
-	output_npy_file_name_prefix = 'emb',
+	output_npy_file_name_prefix = 'x1',
 	sqlContext = sqlContext,
 	padding_length = padding_length,
 	vacabulary_size = vacabulary_size,
