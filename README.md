@@ -1,6 +1,6 @@
 # Deep embedding of sequence and similarity comparision
 
-Behaviour embedding, categorization, regression, and similarity comparision
+Training deep learning models for the purpers of sequence similarity comparision, and then use the embedding layers of the similarity model to represent the sequences
 
 ## Training the similarity deep model
 
