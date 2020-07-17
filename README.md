@@ -233,3 +233,7 @@ calculate the similarities
 online updating of the similarity model 
 
 building a api for the embdding of a sequence, lists of attributs of timestamps 
+
+## Contact
+
+I am actively looking for data science/AI related job. If you have such oppertunity, thank you so much for contact me. I am ready for interview any time. My email is gaoyuanliang@outlook.com 
