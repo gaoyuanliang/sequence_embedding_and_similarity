@@ -147,7 +147,7 @@ def building_x_from_input_dataformat_and_npy(
 	for a in input_format:
 		for b in input_data_attributes:
 			if a['atrribute_name'] == b['atrribute_name']:
-				x.append(numpy.load(b['npy_file']))
+				x.append(np.load(b['npy_file']))
 	return x
 
 #########regression#########
