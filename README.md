@@ -218,12 +218,16 @@ y_vector = emb_model.predict(x)
 calculate the similarities
 
 ```python
->>> numpy.inner(y_vector[0], y_vector[1])
-0.9484213
->>> numpy.inner(y_vector[0], y_vector[4])
-1.3810434
->>> numpy.inner(y_vector[0], y_vector[5])
-0.015031648
->>> numpy.inner(y_vector[0], y_vector[6])
-1.9345983
+>>> print(np.inner(y_vector[0], y_vector[1]))
+0.9249059
+>>> print(np.inner(y_vector[0], y_vector[4]))
+1.348453
+>>> print(np.inner(y_vector[0], y_vector[5]))
+0.020003695
+>>> print(np.inner(y_vector[0], y_vector[6]))
+1.8483427
 ```
+
+## TODO
+
+online updating of the similarity model 
