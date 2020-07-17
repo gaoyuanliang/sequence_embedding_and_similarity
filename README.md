@@ -35,6 +35,22 @@ sqlContext.createDataFrame([
 sqlContext.read.json('example.json').show()
 ```
 
+check the model prediction results over the training set
+
+```python
++-----------+-----+--------------------+
+|document_id|label|          prediction|
++-----------+-----+--------------------+
+|       7335|[2.0]|[1.9618165493011475]|
+|       5897|[2.0]|[1.9188060760498047]|
+|       1234|[2.0]|[2.0617730617523193]|
+|       6789|[1.0]|[0.9564264416694641]|
+|       6895|[1.0]|[0.9779235124588013]|
+|       6895|[1.0]|[1.1057801246643066]|
+|       3456|[0.0]|[0.02453222498297...|
++-----------+-----+--------------------+
+```
+
 you will see how the input tabel looks like
 
 ```python
