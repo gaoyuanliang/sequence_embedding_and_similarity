@@ -197,3 +197,19 @@ it looks like
 |          6|  [l1, l2]|[t1, t2]|
 +-----------+----------+--------+
 ```
+
+reorgnize the data according to the input data format
+
+```
+test_data = behaviour_json2npy(
+	input_json = 'example1.json',
+	output_npy_file_name_prefix = 'emb',
+	sqlContext = sqlContext,
+	padding_length = padding_length,
+	vacabulary_size = vacabulary_size,
+	embedding_dim = embedding_dim)
+
+x = building_x_from_input_dataformat_and_npy(
+	input_format = x_input_data_format,
+	input_data_attributes = test_data)
+```
