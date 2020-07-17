@@ -48,3 +48,5 @@ you will see how the input tabel looks like
 |       3456|[0.0]|  [l1, l2]|[t1, t2]|  [l3, l4]|[t3, t4]|
 +-----------+-----+----------+--------+----------+--------+
 ```
+
+here since we want to compare the similarity of two sequence, we have the columns of the first sequence, x_location and x_time, and the columns of the seconde sequence, y_location and y_time, and their similarity column, label. Each row is a pair of sequences, x and y.
