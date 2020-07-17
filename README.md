@@ -213,3 +213,9 @@ x = building_x_from_input_dataformat_and_npy(
 	input_format = x_input_data_format,
 	input_data_attributes = test_data)
 ```
+
+use the embedding model to conver the x to embedding vectors
+
+```python
+y_vector = emb_model.predict(x)
+```
