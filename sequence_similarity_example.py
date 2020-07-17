@@ -50,13 +50,13 @@ training_data = behaviour_json2npy(
 training the similarity model
 '''
 
-x_profile_attributes = ['x_time', 'x_location']
-y_profile_attributes = ['y_time', 'y_location']
+x_behaviour_attributes = ['x_time', 'x_location']
+y_behaviour_attributes = ['y_time', 'y_location']
 
 model, x_input_data_format, y_input_data_format = train_behaviour_similary_model(
 	training_data,
-	x_profile_attributes,
-	y_profile_attributes,
+	x_behaviour_attributes,
+	y_behaviour_attributes,
 	cnn_layers,
 	sqlContext,
 	epochs = 1000,
@@ -77,7 +77,7 @@ build the embedding model from the trained similarity model
 emb_model = building_embedding_layer_from_pretrained_model(
 	model_weight_file = 'model_similary.h5py',
 	model_structure_json_file = 'model_similary.json',
-	embedding_layer_name = 'x_profile_embedding_model',
+	embedding_layer_name = 'x_behaviour_embedding_model',
 	emb_model_structure_json = 'emb_model.json',
 	emb_model_weight_file = 'emb_model.h5py')
 
