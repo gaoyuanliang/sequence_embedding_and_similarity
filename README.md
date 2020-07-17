@@ -1,4 +1,4 @@
-# Deep embedding of sequence for sequence similarity comparison
+# Deep sequence embedding for sequence similarity comparison
 
 Training deep learning models for the purpose of sequence similarity comparison, and then use the embedding layers of the similarity model to represent the sequences
 
