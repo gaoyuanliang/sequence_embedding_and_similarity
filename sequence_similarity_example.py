@@ -1,8 +1,6 @@
 ##################sequence_similarity_example.py##################
 '''
 example of similarity
-
-git clone https://github.com/gaoyuanliang/jessica_behavour.git
 '''
 
 from jessica_behaviour_dl import *
