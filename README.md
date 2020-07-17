@@ -2,7 +2,7 @@
 
 Behaviour embedding, categorization, regression, and similarity comparision
 
-## Training the similarity deep learning
+## Training the similarity deep model
 
 ### Preparing the training data
 
