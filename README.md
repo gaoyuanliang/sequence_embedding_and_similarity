@@ -153,8 +153,7 @@ check the similarity prediction results of the training set
 +-----------+-----+--------------------+
 ```
 
-build the embedding model from the trained similarity model
-
+## Building the embedding model from the trained deep similarity model
 
 ```python
 
