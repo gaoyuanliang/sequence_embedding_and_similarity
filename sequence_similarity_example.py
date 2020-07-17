@@ -110,24 +110,26 @@ test_data = behaviour_json2npy(
 '''
 building the input data from the test data npy and input format
 '''
-x = []
-for a in x_input_data_format:
-	for b in test_data:
-		if a['atrribute_name'] == b['atrribute_name']:
-			x.append(numpy.load(b['npy_file']))
+
+x = building_x_from_input_dataformat_and_npy(
+	input_format = x_input_data_format,
+	input_data_attributes = test_data)
+
 
 '''
 embdding
 '''
 y_vector = emb_model.predict(x)
 
+print(y_vector)
+
 
 '''
 calcualte similarity
 '''
-numpy.inner(y_vector[0], y_vector[1])
-numpy.inner(y_vector[0], y_vector[4])
-numpy.inner(y_vector[0], y_vector[5])
-numpy.inner(y_vector[0], y_vector[6])
+print(numpy.inner(y_vector[0], y_vector[1]))
+print(numpy.inner(y_vector[0], y_vector[4]))
+print(numpy.inner(y_vector[0], y_vector[5]))
+print(numpy.inner(y_vector[0], y_vector[6])
 
 ##################sequence_similarity_example.py##################
