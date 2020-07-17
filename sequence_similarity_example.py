@@ -125,9 +125,9 @@ print(y_vector)
 '''
 calcualte similarity
 '''
-print(numpy.inner(y_vector[0], y_vector[1]))
-print(numpy.inner(y_vector[0], y_vector[4]))
-print(numpy.inner(y_vector[0], y_vector[5]))
-print(numpy.inner(y_vector[0], y_vector[6]))
+print(np.inner(y_vector[0], y_vector[1]))
+print(np.inner(y_vector[0], y_vector[4]))
+print(np.inner(y_vector[0], y_vector[5]))
+print(np.inner(y_vector[0], y_vector[6]))
 
 ##################sequence_similarity_example.py##################
