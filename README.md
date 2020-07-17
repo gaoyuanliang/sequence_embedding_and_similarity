@@ -53,18 +53,23 @@ you will see how the input tabel looks like
 
 here since we want to compare the similarity of two sequence, we have the columns of the first sequence, x_location and x_time, and the columns of the seconde sequence, y_location and y_time, and their similarity column, label. Each row is a pair of sequences, x and y.
 
-Then we conver the data tabel into npy files to fit to the deep learning input formats
+Then we conver the data tabel into npy files to fit to the deep learning input formats. For the sequence data, each timestamp is composed of two attributes, time and location, so we want to concatnate their embeddings for the convolutional layers. To this end, set the cnn layers parameters as 
+
+```python 
+
+cnn_layers = [
+['x_time', 'x_location'],
+['y_time', 'y_location'],
+]
+```
+
+also set the embedding parameters of each attribute, and do the conversion
 
 ```python
 
 padding_length = {'x_time':5, 'x_location':5, 'y_time':5, 'y_location':5}
 vacabulary_size = {'x_time':24, 'x_location':100, 'y_time':24, 'y_location':100}
 embedding_dim = {'x_time':20, 'x_location':300, 'y_time':20, 'y_location':300}
-
-cnn_layers = [
-['x_time', 'x_location'],
-['y_time', 'y_location'],
-]
 
 training_data = behaviour_json2npy(
 	input_json = 'example.json',
