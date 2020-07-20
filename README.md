@@ -274,13 +274,15 @@ calculate the similarities
 
 ```python
 >>> print(np.inner(y_vector[0], y_vector[1]))
-0.9249059
+0.9617815
 >>> print(np.inner(y_vector[0], y_vector[4]))
-1.348453
+1.4290894
 >>> print(np.inner(y_vector[0], y_vector[5]))
-0.020003695
+0.037912235
 >>> print(np.inner(y_vector[0], y_vector[6]))
-1.8483427
+1.7355305
+>>> print(np.inner(y_vector[7], y_vector[8]))
+1.0690365
 ```
 
 ## TODO
