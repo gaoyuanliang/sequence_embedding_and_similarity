@@ -289,7 +289,7 @@ it works!
 
 ## TODO
 
-online updating of the similarity model 
+online updating of the similarity model with new batch of data
 
 ## Contact
 
