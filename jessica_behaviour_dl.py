@@ -754,10 +754,10 @@ def sequence2x(sequence_x,
 '''
 embedding the sequence
 '''
-def sequence_embedding(sequence_x,
+def bebaviour_embedding(input,
 	x_input_data_format,
 	emb_model):
-	x = sequence2x(sequence_x,
+	x = sequence2x(input,
 		x_input_data_format)
 	y_vector = emb_model.predict(x)
 	return y_vector[0].tolist()
