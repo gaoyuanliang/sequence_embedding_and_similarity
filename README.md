@@ -187,7 +187,7 @@ y_similarity = predict_behaviour_similary_from_model(
 sqlContext.read.json('test_prediction.json').show()
 ```
 
-get the prediciton results
+get the prediction results
 
 ```
 +-----------+--------------------+
@@ -201,7 +201,7 @@ get the prediciton results
 +-----------+--------------------+
 ```
 
-this results is good because the prediction reflects the overlapping timestamp number of two sequences. Meanwhile, the test pairs are not included in the training set.  
+These results are good because the prediction reflects the overlapping timestamp number of two sequences. Meanwhile, the test pairs are not included in the training set.  
 
 ## Using the sequence embedding model
 
@@ -293,4 +293,4 @@ online updating of the similarity model
 
 ## Contact
 
-I am actively looking for data science/AI related job. If you have such oppertunity, thank you so much for contact me. I am ready for interview any time. My email is gaoyuanliang@outlook.com 
+I am actively looking for a data science/AI related job. If you have such an opportunity, thank you so much for contacting me. I am ready for an interview at any time. My email is gaoyuanliang@outlook.com 
