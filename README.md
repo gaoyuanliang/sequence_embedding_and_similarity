@@ -203,7 +203,9 @@ get the prediciton results
 
 this results is good because the prediction reflects the overlapping timestamp number of two sequences. Meanwhile, the test pairs are not included in the training set.  
 
-## Building the embedding model from the trained deep similarity model
+## Using the sequence embedding model
+
+firstly build the embedding model from the similarity model
 
 ```python
 
@@ -214,8 +216,6 @@ emb_model = building_embedding_layer_from_pretrained_model(
 	emb_model_structure_json = 'emb_model.json',
 	emb_model_weight_file = 'emb_model.h5py')
 ```
-
-## Test the embedding results
 
 load the embedding model
 
@@ -234,7 +234,7 @@ sequence_2 = {'x_time':['t1','t3'], 'x_location':['l1','l3']}
 sequence_3 = {'x_time':['t3','t4'], 'x_location':['l3','l4']}
 ```
 
-embed them
+embed them by the embedding model
 
 ```python
 vector_0 = sequence_embedding(
@@ -266,7 +266,7 @@ see how the embedding vector looks like
 >>> 
 ```
 
-calculate the inner product of the vectors
+calculate the inner product of the vectors as the similarities
 
 ```python
 np.inner(np.array(vector_0), np.array(vector_1))
