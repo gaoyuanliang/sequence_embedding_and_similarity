@@ -634,6 +634,7 @@ def predict_behaviour_similary_from_model(
 	test_data,
 	x_input_data_format,
 	y_input_data_format,
+	sqlContext,
 	prediction_json = None):
 	print('loading pretrained model')
 	json_file = open(model_structure_json_file, 'r')
