@@ -143,7 +143,8 @@ y_similarity = predict_behaviour_similary_from_model(
 	test_data = test_data,
 	x_input_data_format = x_input_data_format,
 	y_input_data_format = y_input_data_format,
-	prediction_json = 'test_prediction.json')
+	prediction_json = 'test_prediction.json',
+	sqlContext = sqlContext)
 
 sqlContext.read.json('test_prediction.json').show()
 
