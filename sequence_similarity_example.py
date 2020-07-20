@@ -68,7 +68,7 @@ model, x_input_data_format, y_input_data_format = train_behaviour_similary_model
 	dropout_rate = 0.3,
 	cnn_layer_num = 1,
 	training_type = 'initial',
-	verbose = 1)
+	verbose = 0)
 
 sqlContext.read.json('prediction1.json').show(100, False)
 
@@ -76,6 +76,7 @@ sqlContext.read.json('prediction1.json').show(100, False)
 update the model with more traning data
 '''
 
+'''
 sqlContext.createDataFrame([
 ('7', ['t4','t5'],['l4','l5'], ['t1','t2'],['l1','l2'], [0.0]),
 ('8', ['t4','t5'],['l4','l5'], ['t4','t3'],['l4','l3'], [1.0]),
@@ -108,12 +109,57 @@ model, x_input_data_format, y_input_data_format = train_behaviour_similary_model
 	prediction_json = 'prediction2.json',
 	dropout_rate = 0.3,
 	cnn_layer_num = 1,
-	verbose = 1,
+	verbose = 0,
 	training_type = 'update',
 	x_input_data_format = x_input_data_format,
 	y_input_data_format = y_input_data_format)
 
 sqlContext.read.json('prediction2.json').show()
+'''
+
+'''
+test the similarity score prediction
+'''
+sqlContext.createDataFrame([
+('0', ['t1','t2'],['l1','l2'], ['t1','t3'],['l1','l3']),
+('1', ['t1','t2'],['l1','l2'], ['t1'],['l1']),
+('2', ['t1','t2'],['l1','l2'], ['t4','t3'],['l4','l3']),
+('3', ['t1','t2'],['l1','l2'], ['t1','t2'],['l1','l2']),
+('4', ['t1','t2'],['l1','l2'], ['t6','t3'],['l6','l3']),
+],
+['document_id','x_time', 'x_location', 'y_time', 'y_location']).write.mode('Overwrite').json('test.json')
+
+test_data = behaviour_json2npy(
+	input_json = 'test.json',
+	output_npy_file_name_prefix = 'test',
+	sqlContext = sqlContext,
+	padding_length = padding_length,
+	vacabulary_size = vacabulary_size,
+	embedding_dim = embedding_dim)
+
+y_similarity = predict_behaviour_similary_from_model(
+	model_weight_file = 'model_similary.h5py',
+	model_structure_json_file = 'model_similary.json',
+	test_data = test_data,
+	x_input_data_format = x_input_data_format,
+	y_input_data_format = y_input_data_format,
+	prediction_json = 'test_prediction.json')
+
+sqlContext.read.json('test_prediction.json').show()
+
+'''
+sqlContext.read.json('test_prediction.json').registerTempTable('test_prediction')
+sqlContext.read.json('training*.json').registerTempTable('training')
+sqlContext.sql(u"""
+	SELECT training.document_id, 
+	training.label, 
+	test_prediction.prediction
+	FROM training
+	LEFT JOIN test_prediction
+	ON test_prediction.document_id
+	= training.document_id
+	""").show()
+'''
 
 '''
 build the embedding model from the trained similarity model
@@ -126,65 +172,57 @@ emb_model = building_embedding_layer_from_pretrained_model(
 	emb_model_weight_file = 'emb_model.h5py')
 
 '''
-create the test data set for the embedding
+load the embedding model
 '''
-sqlContext.createDataFrame([
-('0', ['t1','t2'],['l1','l2']),
-('1', ['t1','t3'],['l1','l3']),
-('2', ['t1','t4'],['l1','l4']),
-('3', ['t2','t3'],['l2','l3']),
-('4', ['t1'],['l1']),
-('5', ['t4','t3'],['l4','l3']),
-('6', ['t1','t2'],['l1','l2']),
-('7', ['t6'],['l6']),
-('8', ['t6','t3'],['l6','l3']),
-],
-['document_id','x_time', 'x_location']).write.mode('Overwrite').json('test.json')
-
-sqlContext.read.json('test.json').show()
-
-test_data = behaviour_json2npy(
-	input_json = 'test.json',
-	output_npy_file_name_prefix = 'test',
-	sqlContext = sqlContext,
-	padding_length = padding_length,
-	vacabulary_size = vacabulary_size,
-	embedding_dim = embedding_dim)
+emb_model = load_model(
+	model_structure_json = 'emb_model.json',
+	model_weight_file = 'emb_model.h5py')
 
 '''
-building the input data from the test data npy and input format
+create the sequences data
 '''
-x = building_x_from_input_dataformat_and_npy(
-	input_format = x_input_data_format,
-	input_data_attributes = test_data)
+sequence_0 = {'x_time':['t1','t2'], 'x_location':['l1','l2']}
+sequence_1 = {'x_time':['t1','t2'], 'x_location':['l1','l2']}
+sequence_2 = {'x_time':['t1','t3'], 'x_location':['l1','l3']}
+sequence_3 = {'x_time':['t3','t4'], 'x_location':['l3','l4']}
 
 '''
-embdding
+embed them
 '''
-y_vector = emb_model.predict(x)
+vector_0 = sequence_embedding(
+	sequence_x = sequence_0,
+	x_input_data_format = x_input_data_format,
+	emb_model = emb_model)
 
-print(y_vector)
+vector_1 = sequence_embedding(
+	sequence_x = sequence_1,
+	x_input_data_format = x_input_data_format,
+	emb_model = emb_model)
 
+vector_2 = sequence_embedding(
+	sequence_x = sequence_2,
+	x_input_data_format = x_input_data_format,
+	emb_model = emb_model)
+
+vector_3 = sequence_embedding(
+	sequence_x = sequence_3,
+	x_input_data_format = x_input_data_format,
+	emb_model = emb_model)
 
 '''
-calcualte similarity
+calculate the inner product of the vectors
 '''
-print(np.inner(y_vector[0], y_vector[1]))
-print(np.inner(y_vector[0], y_vector[4]))
-print(np.inner(y_vector[0], y_vector[5]))
-print(np.inner(y_vector[0], y_vector[6]))
-print(np.inner(y_vector[7], y_vector[8]))
+np.inner(np.array(vector_0), np.array(vector_1))
+np.inner(np.array(vector_0), np.array(vector_2))
+np.inner(np.array(vector_0), np.array(vector_3))
 
 '''
->>> print(np.inner(y_vector[0], y_vector[1]))
-1.0672512
->>> print(np.inner(y_vector[0], y_vector[4]))
-1.5836941
->>> print(np.inner(y_vector[0], y_vector[5]))
-0.034832597
->>> print(np.inner(y_vector[0], y_vector[6]))
-2.1542969
->>> print(np.inner(y_vector[7], y_vector[8]))
-1.0411918
+>>> np.inner(np.array(vector_0), np.array(vector_1))
+1.7355304520201214
+>>> np.inner(np.array(vector_0), np.array(vector_2))
+0.9617815310324274
+>>> np.inner(np.array(vector_0), np.array(vector_3))
+0.03791223773242554
 '''
+
 #################sequence_similarity_example.py##################
