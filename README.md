@@ -188,7 +188,7 @@ sqlContext.read.json('test_prediction.json').show()
 
 get the prediciton results
 
-```python
+```
 +-----------+--------------------+
 |document_id|          prediction|
 +-----------+--------------------+
