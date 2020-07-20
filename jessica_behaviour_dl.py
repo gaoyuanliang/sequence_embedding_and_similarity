@@ -529,15 +529,22 @@ def train_behaviour_similary_model(
 	epochs = 4,
 	gpus = None,
 	batch_size = 500,
-	model_file = None,
+	model_weight_file = None,
 	model_structure_json_file = None, 
 	prediction_json = None,
 	dropout_rate = 0.3,
-	cnn_layer_num = 2):
+	cnn_layer_num = 2,
+	training_type = 'initial',
+	x_input_data_format = None,
+	y_input_data_format = None,
+	verbose = 1):
 	start_time = time.time()
-	#build the model
+	'''
+	if training_type == 'initial':
+		#build the model
+	'''
 	print('building the model')
-	model, x_input_data_inf, y_input_data_inf = build_behaviour_similarity_model(
+	model, x_input_data_format, y_input_data_format = build_behaviour_similarity_model(
 		data_attributes,
 		cnn_layers,
 		x_behaviour_attributes,
@@ -548,30 +555,49 @@ def train_behaviour_similary_model(
 	model.compile(loss='mean_squared_error',
 		optimizer='adam',
 		metrics=['mean_squared_error'])
+	if training_type == 'update':
+		print('loading initial model')
+		'''
+		json_file = open(model_structure_json_file, 'r')
+		loaded_model_json = json_file.read()
+		json_file.close()
+		model = model_from_json(loaded_model_json)
+		model.compile(loss='mean_squared_error',
+			optimizer='adam',
+			metrics=['mean_squared_error'])
+		'''
+		model.load_weights(model_weight_file)
 	#train the model
 	######load the data
-	print('laoding the training  data from the configuration')
-	x = []
-	for a in x_input_data_inf+y_input_data_inf:
-		x.append(np.load(a['npy_file']))
+	print('loading the training data')
+	x = building_x_from_input_dataformat_and_npy(
+		input_format = x_input_data_format+y_input_data_format,
+		input_data_attributes = data_attributes)
 	for f in data_attributes:
 		if f['atrribute_name'] == 'label':
 			print('loading label data from %s'%(f['npy_file']))
 			y = np.load(f['npy_file'])
+	'''
+	for a in x:
+		print(a.shape)
+	print(x)
+	'''
 	######
 	print('training model')
 	model.fit(x, y,
-		batch_size = batch_size, \
-		epochs = epochs)
+		batch_size = batch_size,
+		epochs = epochs,
+		verbose = verbose)
 	#####
-	if model_file is not None:
-		print('saving model weight to  %s'%(model_file))
-		model.save_weights(model_file)
 	if model_structure_json_file is not None:
 		print('saving model structure to %s'%(model_structure_json_file))
 		model_json = model.to_json()
 		with open(model_structure_json_file, "w") as json_file:
 			json_file.write(model_json)
+	#####
+	if model_weight_file is not None:
+		print('saving model weight to  %s'%(model_weight_file))
+		model.save_weights(model_weight_file)
 	#####
 	if prediction_json is not None:
 		print('predicting the output of the training samples')
@@ -597,7 +623,7 @@ def train_behaviour_similary_model(
 		df.write.mode('Overwrite').json(prediction_json)
 	####
 	print('training time:\t%f scondes'%(time.time()-start_time))
-	return model, x_input_data_inf, y_input_data_inf
+	return model, x_input_data_format, y_input_data_format
 
 '''
 building the embedding model from pre-trained similarity model
