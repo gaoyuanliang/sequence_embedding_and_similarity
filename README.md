@@ -186,6 +186,22 @@ y_similarity = predict_behaviour_similary_from_model(
 sqlContext.read.json('test_prediction.json').show()
 ```
 
+get the prediciton results
+
+```python
++-----------+--------------------+
+|document_id|          prediction|
++-----------+--------------------+
+|          0|[0.9617815613746643]|
+|          1|[1.4290894269943237]|
+|          2|[0.03791223838925...|
+|          3|[1.7355303764343262]|
+|          4|[0.25222671031951...|
++-----------+--------------------+
+```
+
+this results is good because the prediction reflects the overlapping timestamp number of two sequences. Meanwhile, the test pairs are not included in the training set.  
+
 ## Building the embedding model from the trained deep similarity model
 
 ```python
