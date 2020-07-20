@@ -149,6 +149,43 @@ check the similarity prediction results of the training set
 +-----------+-----+--------------------+
 ```
 
+### Testing the similarity model 
+
+prepare the test data of pairs of sequences 
+
+```python
+sqlContext.createDataFrame([
+('0', ['t1','t2'],['l1','l2'], ['t1','t3'],['l1','l3']),
+('1', ['t1','t2'],['l1','l2'], ['t1'],['l1']),
+('2', ['t1','t2'],['l1','l2'], ['t4','t3'],['l4','l3']),
+('3', ['t1','t2'],['l1','l2'], ['t1','t2'],['l1','l2']),
+('4', ['t1','t2'],['l1','l2'], ['t6','t3'],['l6','l3']),
+],
+['document_id','x_time', 'x_location', 'y_time', 'y_location']).write.mode('Overwrite').json('test.json')
+
+test_data = behaviour_json2npy(
+	input_json = 'test.json',
+	output_npy_file_name_prefix = 'test',
+	sqlContext = sqlContext,
+	padding_length = padding_length,
+	vacabulary_size = vacabulary_size,
+	embedding_dim = embedding_dim)
+```
+
+predict the similarity
+
+```python
+y_similarity = predict_behaviour_similary_from_model(
+	model_weight_file = 'model_similary.h5py',
+	model_structure_json_file = 'model_similary.json',
+	test_data = test_data,
+	x_input_data_format = x_input_data_format,
+	y_input_data_format = y_input_data_format,
+	prediction_json = 'test_prediction.json')
+
+sqlContext.read.json('test_prediction.json').show()
+```
+
 ## Building the embedding model from the trained deep similarity model
 
 ```python
