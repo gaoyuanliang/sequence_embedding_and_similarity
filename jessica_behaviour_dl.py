@@ -707,4 +707,55 @@ def building_embedding_layer_from_pretrained_model(
 	emb_model.save_weights(emb_model_weight_file)
 	return emb_model
 
+
+'''
+load embedding model
+'''
+def load_model(model_structure_json,
+	model_weight_file):
+	json_file = open(model_structure_json, 'r')
+	loaded_model_json = json_file.read()
+	json_file.close()
+	emb_model = model_from_json(loaded_model_json)
+	emb_model.load_weights(model_weight_file)
+	return emb_model
+
+'''
+convert a sequence to a list of npy
+'''
+def sequence2x(sequence_x,
+	x_input_data_format):
+	#######
+	def pading(input, max_list_len, filled_element = 0):
+		output = [filled_element]*max_list_len
+		len_input = len(input)
+		n = numpy.min([len_input, max_list_len])
+		output[0:n] = input[0:n]
+		return output
+	#######
+	x = []
+	for a in x_input_data_format:
+		for k in sequence_x:
+			if a['atrribute_name'] == k:
+				if 'vacabulary_size' in a:
+					x1 = hash_list(sequence_x[k], num_word_max = a['vacabulary_size'])
+				if 'padding_length' in a:
+					if 'vacabulary_size' in a:
+						x1 = pading(x1, max_list_len = a['padding_length'], filled_element = 0)
+					else:
+						x1 = pading(x1, max_list_len = a['padding_length'], filled_element = 0.0)
+				x.append(np.array([x1]))
+	return x
+
+'''
+embedding the sequence
+'''
+def sequence_embedding(sequence_x,
+	x_input_data_format,
+	emb_model):
+	x = sequence2x(sequence_x,
+		x_input_data_format)
+	y_vector = emb_model.predict(x)
+	return y_vector[0].tolist()
+
 ############jessica_behaviour_dl.py##########
