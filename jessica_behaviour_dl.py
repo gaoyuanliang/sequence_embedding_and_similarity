@@ -626,6 +626,48 @@ def train_behaviour_similary_model(
 	return model, x_input_data_format, y_input_data_format
 
 '''
+predict the similarity from the test data
+'''
+def predict_behaviour_similary_from_model(
+	model_weight_file,
+	model_structure_json_file,
+	test_data,
+	x_input_data_format,
+	y_input_data_format,
+	prediction_json = None):
+	print('loading pretrained model')
+	json_file = open(model_structure_json_file, 'r')
+	loaded_model_json = json_file.read()
+	json_file.close()
+	similarity_model = model_from_json(loaded_model_json)
+	similarity_model.load_weights(model_weight_file)
+	print('loading data')
+	x = []
+	for a in x_input_data_format+y_input_data_format:
+		for b in test_data:
+			if a['atrribute_name'] == b['atrribute_name']:
+				x.append(np.load(b['npy_file']))
+	y_score = similarity_model.predict(x)
+	print('building the prediction dataframe')
+	if prediction_json is not None:
+		for b in test_data:
+			if b['atrribute_name'] == 'document_id':
+				x_document_id = np.load(b['npy_file'])
+		df_list = [[list(preidction), str(file_name)] 
+			for preidction, file_name
+			in zip(y_score.tolist(),
+				x_document_id.tolist())]
+		###
+		df_schema = StructType([\
+			StructField('prediction', ArrayType(DoubleType())),\
+			StructField('document_id', StringType())])
+		###
+		df = sqlContext.createDataFrame(df_list, schema = df_schema)
+		print('saving prediction results to %s'%(prediction_json))
+		df.write.mode('Overwrite').json(prediction_json)
+	return y_score
+
+'''
 building the embedding model from pre-trained similarity model
 '''
 def building_embedding_layer_from_pretrained_model(
