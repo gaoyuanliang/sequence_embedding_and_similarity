@@ -237,23 +237,23 @@ sequence_3 = {'x_time':['t3','t4'], 'x_location':['l3','l4']}
 embed them by the embedding model
 
 ```python
-vector_0 = sequence_embedding(
-	sequence_x = sequence_0,
+vector_0 = bebaviour_embedding(
+	input = sequence_0,
 	x_input_data_format = x_input_data_format,
 	emb_model = emb_model)
 
-vector_1 = sequence_embedding(
-	sequence_x = sequence_1,
+vector_1 = bebaviour_embedding(
+	input = sequence_1,
 	x_input_data_format = x_input_data_format,
 	emb_model = emb_model)
 
-vector_2 = sequence_embedding(
-	sequence_x = sequence_2,
+vector_2 = bebaviour_embedding(
+	input = sequence_2,
 	x_input_data_format = x_input_data_format,
 	emb_model = emb_model)
 
-vector_3 = sequence_embedding(
-	sequence_x = sequence_3,
+vector_3 = bebaviour_embedding(
+	input = sequence_3,
 	x_input_data_format = x_input_data_format,
 	emb_model = emb_model)
 ```
@@ -269,20 +269,28 @@ see how the embedding vector looks like
 calculate the inner product of the vectors as the similarities
 
 ```python
-np.inner(np.array(vector_0), np.array(vector_1))
-np.inner(np.array(vector_0), np.array(vector_2))
-np.inner(np.array(vector_0), np.array(vector_3))
+print('similartity between %s and %s: %f'%(
+	str(sequence_0), 
+	str(sequence_1),
+	np.inner(np.array(vector_0), np.array(vector_1))))
+
+print('similartity between %s and %s: %f'%(
+	str(sequence_0), 
+	str(sequence_2),
+	np.inner(np.array(vector_0), np.array(vector_2))))
+
+print('similartity between %s and %s: %f'%(
+	str(sequence_0), 
+	str(sequence_3),
+	np.inner(np.array(vector_0), np.array(vector_3))))
 ```
 
 see the outputs
 
 ```python
->>> np.inner(np.array(vector_0), np.array(vector_1))
-1.7355304520201214
->>> np.inner(np.array(vector_0), np.array(vector_2))
-0.9617815310324274
->>> np.inner(np.array(vector_0), np.array(vector_3))
-0.03791223773242554
+similartity between {'x_time': ['t1', 't2'], 'x_location': ['l1', 'l2']} and {'x_time': ['t1', 't2'], 'x_location': ['l1', 'l2']}: 1.841716
+similartity between {'x_time': ['t1', 't2'], 'x_location': ['l1', 'l2']} and {'x_time': ['t1', 't3'], 'x_location': ['l1', 'l3']}: 1.029113
+similartity between {'x_time': ['t1', 't2'], 'x_location': ['l1', 'l2']} and {'x_time': ['t3', 't4'], 'x_location': ['l3', 'l4']}: 0.036231
 ```
 
 it works!
