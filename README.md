@@ -137,7 +137,10 @@ sqlContext.read.json('prediction1.json').show(100, False)
 the trained model also has its corresponding input format
 
 ```python
-x_input_data_format = [{'vacabulary_size': 24, 'padding_length': 10, 'embedding_dim': 20, 'atrribute_name': 'x_time', 'npy_file': 'training1_x_time.npy'}, {'vacabulary_size': 100, 'padding_length': 10, 'embedding_dim': 300, 'atrribute_name': 'x_location', 'npy_file': 'training1_x_location.npy'}]
+>>> x_input_data_format
+[{'vacabulary_size': 24, 'padding_length': 10, 'embedding_dim': 20, 'atrribute_name': 'x_time', 'npy_file': 'training1_x_time.npy'}, {'vacabulary_size': 100, 'padding_length': 10, 'embedding_dim': 300, 'atrribute_name': 'x_location', 'npy_file': 'training1_x_location.npy'}]
+>>> y_input_data_format
+[{'vacabulary_size': 24, 'padding_length': 10, 'embedding_dim': 20, 'atrribute_name': 'y_time', 'npy_file': 'training1_y_time.npy'}, {'vacabulary_size': 100, 'padding_length': 10, 'embedding_dim': 300, 'atrribute_name': 'y_location', 'npy_file': 'training1_y_location.npy'}]
 ```
 
 check the similarity prediction results of the training set
