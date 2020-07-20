@@ -34,17 +34,17 @@ then create the similarity training data and save to a json folder
 ```python
 
 sqlContext.createDataFrame([
-('7335', ['t1','t2'],['l1','l2'], ['t1','t2'],['l1','l2'], [2.0]),
-('5897', ['t1','t3'],['l1','l3'], ['t1','t3'],['l1','l3'], [2.0]),
-('1234', ['t3','t4'],['l3','l4'], ['t3','t4'],['l3','l4'], [2.0]),
-('6789', ['t1','t2'],['l1','l2'], ['t1','t3'],['l1','l3'], [1.0]),
-('6895', ['t1','t3'],['l1','l3'], ['t3','t4'],['l3','l4'], [1.0]),
-('6895', ['t4'],['l4'], ['t4'],['l4'], [1.0]),
-('3456', ['t1','t2'],['l1','l2'], ['t3','t4'],['l3','l4'], [0.0]),
+('0', ['t1','t2'],['l1','l2'], ['t1','t2'],['l1','l2'], [2.0]),
+('1', ['t1','t3'],['l1','l3'], ['t1','t3'],['l1','l3'], [2.0]),
+('2', ['t3','t4'],['l3','l4'], ['t3','t4'],['l3','l4'], [2.0]),
+('3', ['t1','t2'],['l1','l2'], ['t1','t3'],['l1','l3'], [1.0]),
+('4', ['t1','t3'],['l1','l3'], ['t3','t4'],['l3','l4'], [1.0]),
+('5', ['t4'],['l4'], ['t4'],['l4'], [1.0]),
+('6', ['t1','t2'],['l1','l2'], ['t3','t4'],['l3','l4'], [0.0]),
 ],
-['document_id','x_time', 'x_location', 'y_time', 'y_location','label']).write.mode('Overwrite').json('example.json')
+['document_id','x_time', 'x_location', 'y_time', 'y_location','label']).write.mode('Overwrite').json('training1.json')
 
-sqlContext.read.json('example.json').show()
+sqlContext.read.json('training1.json').show()
 ```
 
 you will see how the input table looks like
@@ -53,13 +53,13 @@ you will see how the input table looks like
 +-----------+-----+----------+--------+----------+--------+
 |document_id|label|x_location|  x_time|y_location|  y_time|
 +-----------+-----+----------+--------+----------+--------+
-|       7335|[2.0]|  [l1, l2]|[t1, t2]|  [l1, l2]|[t1, t2]|
-|       5897|[2.0]|  [l1, l3]|[t1, t3]|  [l1, l3]|[t1, t3]|
-|       1234|[2.0]|  [l3, l4]|[t3, t4]|  [l3, l4]|[t3, t4]|
-|       6789|[1.0]|  [l1, l2]|[t1, t2]|  [l1, l3]|[t1, t3]|
-|       6895|[1.0]|  [l1, l3]|[t1, t3]|  [l3, l4]|[t3, t4]|
-|       6895|[1.0]|      [l4]|    [t4]|      [l4]|    [t4]|
-|       3456|[0.0]|  [l1, l2]|[t1, t2]|  [l3, l4]|[t3, t4]|
+|          0|[2.0]|  [l1, l2]|[t1, t2]|  [l1, l2]|[t1, t2]|
+|          1|[2.0]|  [l1, l3]|[t1, t3]|  [l1, l3]|[t1, t3]|
+|          2|[2.0]|  [l3, l4]|[t3, t4]|  [l3, l4]|[t3, t4]|
+|          3|[1.0]|  [l1, l2]|[t1, t2]|  [l1, l3]|[t1, t3]|
+|          4|[1.0]|  [l1, l3]|[t1, t3]|  [l3, l4]|[t3, t4]|
+|          5|[1.0]|      [l4]|    [t4]|      [l4]|    [t4]|
+|          6|[0.0]|  [l1, l2]|[t1, t2]|  [l3, l4]|[t3, t4]|
 +-----------+-----+----------+--------+----------+--------+
 ```
 
@@ -83,14 +83,13 @@ padding_length = {'x_time':5, 'x_location':5, 'y_time':5, 'y_location':5}
 vacabulary_size = {'x_time':24, 'x_location':100, 'y_time':24, 'y_location':100}
 embedding_dim = {'x_time':20, 'x_location':300, 'y_time':20, 'y_location':300}
 
-training_data = behaviour_json2npy(
-	input_json = 'example.json',
-	output_npy_file_name_prefix = 'x',
+training1_data = behaviour_json2npy(
+	input_json = 'training1.json',
+	output_npy_file_name_prefix = 'training1',
 	sqlContext = sqlContext,
 	padding_length = padding_length,
 	vacabulary_size = vacabulary_size,
-	embedding_dim = embedding_dim)
-  
+	embedding_dim = embedding_dim)  
   ```
   
 the training data attributes looks like 
@@ -116,37 +115,39 @@ x_behaviour_attributes = ['x_time', 'x_location']
 y_behaviour_attributes = ['y_time', 'y_location']
 
 model, x_input_data_format, y_input_data_format = train_behaviour_similary_model(
-	training_data,
+	training1_data,
 	x_behaviour_attributes,
 	y_behaviour_attributes,
 	cnn_layers,
 	sqlContext,
-	epochs = 1000,
+	epochs = 500,
 	gpus = None,
-	batch_size = 500,
-	model_file = 'model_similary.h5py',
+	batch_size = 3,
+	model_weight_file = 'model_similary.h5py',
 	model_structure_json_file = 'model_similary.json',
-	prediction_json = 'similary.json',
+	prediction_json = 'prediction1.json',
 	dropout_rate = 0.3,
-	cnn_layer_num = 1)
+	cnn_layer_num = 1,
+	training_type = 'initial',
+	verbose = 0)
 
-sqlContext.read.json('similary.json').show()
+sqlContext.read.json('prediction1.json').show(100, False)
 ```
 
 check the similarity prediction results of the training set
 
 ```
-+-----------+-----+--------------------+
-|document_id|label|          prediction|
-+-----------+-----+--------------------+
-|       7335|[2.0]|[1.9618165493011475]|
-|       5897|[2.0]|[1.9188060760498047]|
-|       1234|[2.0]|[2.0617730617523193]|
-|       6789|[1.0]|[0.9564264416694641]|
-|       6895|[1.0]|[0.9779235124588013]|
-|       6895|[1.0]|[1.1057801246643066]|
-|       3456|[0.0]|[0.02453222498297...|
-+-----------+-----+--------------------+
++-----------+-----+----------------------+
+|document_id|label|prediction            |
++-----------+-----+----------------------+
+|0          |[2.0]|[1.893908977508545]   |
+|1          |[2.0]|[2.372021198272705]   |
+|2          |[2.0]|[2.2358736991882324]  |
+|3          |[1.0]|[1.0030103921890259]  |
+|4          |[1.0]|[1.0954625606536865]  |
+|5          |[1.0]|[1.0376049280166626]  |
+|6          |[0.0]|[0.024610396474599838]|
++-----------+-----+----------------------+
 ```
 
 ### Testing the similarity model 
@@ -192,11 +193,11 @@ get the prediciton results
 +-----------+--------------------+
 |document_id|          prediction|
 +-----------+--------------------+
-|          0|[0.9617815613746643]|
-|          1|[1.4290894269943237]|
-|          2|[0.03791223838925...|
-|          3|[1.7355303764343262]|
-|          4|[0.25222671031951...|
+|          0|[1.0030103921890259]|
+|          1|[1.5088016986846924]|
+|          2|[0.02461039647459...|
+|          3| [1.893908977508545]|
+|          4|[0.41396504640579...|
 +-----------+--------------------+
 ```
 
