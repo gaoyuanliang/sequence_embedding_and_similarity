@@ -216,80 +216,69 @@ emb_model = building_embedding_layer_from_pretrained_model(
 
 ## Test the embedding results
 
-building the test data set, but this time each row only have one sequence with attributes of time and location
+load the embedding model
 
 ```python
-sqlContext.createDataFrame([
-('0', ['t1','t2'],['l1','l2']),
-('1', ['t1','t3'],['l1','l3']),
-('2', ['t1','t4'],['l1','l4']),
-('3', ['t2','t3'],['l2','l3']),
-('4', ['t1'],['l1']),
-('5', ['t4','t3'],['l4','l3']),
-('6', ['t1','t2'],['l1','l2']),
-],
-['document_id','x_time', 'x_location']).write.mode('Overwrite').json('example1.json')
+emb_model = load_model(
+	model_structure_json = 'emb_model.json',
+	model_weight_file = 'emb_model.h5py')
 ```
 
-it looks like 
-
-```
-+-----------+----------+--------+
-|document_id|x_location|  x_time|
-+-----------+----------+--------+
-|          0|  [l1, l2]|[t1, t2]|
-|          1|  [l1, l3]|[t1, t3]|
-|          2|  [l1, l4]|[t1, t4]|
-|          3|  [l2, l3]|[t2, t3]|
-|          4|      [l1]|    [t1]|
-|          5|  [l4, l3]|[t4, t3]|
-|          6|  [l1, l2]|[t1, t2]|
-+-----------+----------+--------+
-```
-
-re-organize the data according to the input data format
+create the sequences data
 
 ```python
-test_data = behaviour_json2npy(
-	input_json = 'example1.json',
-	output_npy_file_name_prefix = 'x1',
-	sqlContext = sqlContext,
-	padding_length = padding_length,
-	vacabulary_size = vacabulary_size,
-	embedding_dim = embedding_dim)
-
-x = building_x_from_input_dataformat_and_npy(
-	input_format = x_input_data_format,
-	input_data_attributes = test_data)
+sequence_0 = {'x_time':['t1','t2'], 'x_location':['l1','l2']}
+sequence_1 = {'x_time':['t1','t2'], 'x_location':['l1','l2']}
+sequence_2 = {'x_time':['t1','t3'], 'x_location':['l1','l3']}
+sequence_3 = {'x_time':['t3','t4'], 'x_location':['l3','l4']}
 ```
 
-use the embedding model to convert the x to embedding vectors
+embed them
 
 ```python
-y_vector = emb_model.predict(x)
+vector_0 = sequence_embedding(
+	sequence_x = sequence_0,
+	x_input_data_format = x_input_data_format,
+	emb_model = emb_model)
+
+vector_1 = sequence_embedding(
+	sequence_x = sequence_1,
+	x_input_data_format = x_input_data_format,
+	emb_model = emb_model)
+
+vector_2 = sequence_embedding(
+	sequence_x = sequence_2,
+	x_input_data_format = x_input_data_format,
+	emb_model = emb_model)
+
+vector_3 = sequence_embedding(
+	sequence_x = sequence_3,
+	x_input_data_format = x_input_data_format,
+	emb_model = emb_model)
 ```
 
-
-calculate the similarities
+calculate the inner product of the vectors
 
 ```python
->>> print(np.inner(y_vector[0], y_vector[1]))
-0.9617815
->>> print(np.inner(y_vector[0], y_vector[4]))
-1.4290894
->>> print(np.inner(y_vector[0], y_vector[5]))
-0.037912235
->>> print(np.inner(y_vector[0], y_vector[6]))
-1.7355305
->>> print(np.inner(y_vector[7], y_vector[8]))
-1.0690365
+np.inner(np.array(vector_0), np.array(vector_1))
+np.inner(np.array(vector_0), np.array(vector_2))
+np.inner(np.array(vector_0), np.array(vector_3))
+```
+
+see the outputs
+
+```python
+>>> np.inner(np.array(vector_0), np.array(vector_1))
+1.7355304520201214
+>>> np.inner(np.array(vector_0), np.array(vector_2))
+0.9617815310324274
+>>> np.inner(np.array(vector_0), np.array(vector_3))
+0.03791223773242554
 ```
 
 ## TODO
 
 online updating of the similarity model 
-
-building a api for the embdding of a sequence, lists of attributs of timestamps 
 
 ## Contact
 
