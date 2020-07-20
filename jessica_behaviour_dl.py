@@ -16,6 +16,8 @@ from pyspark.sql import *
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
 
+from jessica_behaviour_spark import *
+
 ####################
 
 def build_behaviour_embedding_model(
@@ -720,6 +722,7 @@ def load_model(model_structure_json,
 	emb_model = model_from_json(loaded_model_json)
 	emb_model.load_weights(model_weight_file)
 	return emb_model
+
 
 '''
 convert a sequence to a list of npy
