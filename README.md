@@ -285,6 +285,8 @@ see the outputs
 0.03791223773242554
 ```
 
+it works!
+
 ## TODO
 
 online updating of the similarity model 
