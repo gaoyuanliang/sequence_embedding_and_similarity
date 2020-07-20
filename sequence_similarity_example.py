@@ -129,6 +129,8 @@ sqlContext.createDataFrame([
 ],
 ['document_id','x_time', 'x_location', 'y_time', 'y_location']).write.mode('Overwrite').json('test.json')
 
+sqlContext.read.json('test.json').show(100, False)
+
 test_data = behaviour_json2npy(
 	input_json = 'test.json',
 	output_npy_file_name_prefix = 'test',
@@ -213,9 +215,20 @@ vector_3 = sequence_embedding(
 '''
 calculate the inner product of the vectors
 '''
-np.inner(np.array(vector_0), np.array(vector_1))
-np.inner(np.array(vector_0), np.array(vector_2))
-np.inner(np.array(vector_0), np.array(vector_3))
+print('similartity between %s and %s: %f'%(
+	str(sequence_0), 
+	str(sequence_1),
+	np.inner(np.array(vector_0), np.array(vector_1))))
+
+print('similartity between %s and %s: %f'%(
+	str(sequence_0), 
+	str(sequence_2),
+	np.inner(np.array(vector_0), np.array(vector_2))))
+
+print('similartity between %s and %s: %f'%(
+	str(sequence_0), 
+	str(sequence_3),
+	np.inner(np.array(vector_0), np.array(vector_3))))
 
 '''
 >>> np.inner(np.array(vector_0), np.array(vector_1))
