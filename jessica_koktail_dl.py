@@ -1,4 +1,4 @@
-############jessica_behaviour_dl.py##########
+############jessica_koktail_dl.py##########
 import h5py
 import time
 import numpy as np
@@ -16,11 +16,11 @@ from pyspark.sql import *
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
 
-from jessica_behaviour_spark import *
+from jessica_koktail_spark import *
 
 ####################
 
-def build_behaviour_embedding_model(
+def build_koktail_embedding_model(
 	data_attributes,
 	cnn_layers,
 	dropout_rate = 0.3,
@@ -154,23 +154,23 @@ def building_x_from_input_dataformat_and_npy(
 
 #########regression#########
 
-def build_behaviour_regression_model(
+def build_koktail_regression_model(
 	data_attributes,
 	cnn_layers,
 	response_dim = 1,
 	gpus = None,
 	dropout_rate = 0.3):
-	behaviour_embedding_model, input_data_inf = build_behaviour_embedding_model(
+	koktail_embedding_model, input_data_inf = build_koktail_embedding_model(
 		data_attributes,
 		cnn_layers,
 		dropout_rate)
-	o = Dense(units = response_dim)(behaviour_embedding_model.output)
-	model_regression = Model(inputs=behaviour_embedding_model.input, outputs=o)
+	o = Dense(units = response_dim)(koktail_embedding_model.output)
+	model_regression = Model(inputs=koktail_embedding_model.input, outputs=o)
 	if gpus is not None:
 		model_regression = multi_gpu_model(model_regression, gpus = gpus)
 	return model_regression, input_data_inf
 
-def train_behaviour_regression_model(data_attributes,
+def train_koktail_regression_model(data_attributes,
 	cnn_layers,
 	sqlContext,
 	response_dim = 1,
@@ -183,7 +183,7 @@ def train_behaviour_regression_model(data_attributes,
 	start_time = time.time()
 	#build the model
 	print('building the model')
-	model, input_data_inf = build_behaviour_regression_model(
+	model, input_data_inf = build_koktail_regression_model(
 		data_attributes,
 		cnn_layers,
 		response_dim = response_dim, 
@@ -239,7 +239,7 @@ def train_behaviour_regression_model(data_attributes,
 	print('training time:\t%f scondes'%(time.time()-start_time))
 	return model, input_data_inf
 
-def behaviour_regression_from_model(
+def koktail_regression_from_model(
 	test_data_attributes,
 	model_input_data_format,
 	cnn_layers,
@@ -250,7 +250,7 @@ def behaviour_regression_from_model(
 	gpus = None,
 	dropout_rate = 0.3):
 	print('building the model')
-	model, input_data_inf = build_behaviour_regression_model(
+	model, input_data_inf = build_koktail_regression_model(
 		model_input_data_format,
 		cnn_layers,
 		response_dim = response_dim, 
@@ -290,23 +290,23 @@ def behaviour_regression_from_model(
 
 #########classification#########
 
-def build_behaviour_categorization_model(
+def build_koktail_categorization_model(
 	data_attributes,
 	cnn_layers,
 	max_class_num = 2,
 	cnn_layer_num = 1,
 	gpus = None):
-	behaviour_embedding_model, input_data_inf = build_behaviour_embedding_model(
+	koktail_embedding_model, input_data_inf = build_koktail_embedding_model(
 		data_attributes,
 		cnn_layers,
 		cnn_layer_num = cnn_layer_num)
-	o = Dense(units = max_class_num, activation='softmax')(behaviour_embedding_model.output)
-	model_classification = Model(inputs=behaviour_embedding_model.input, outputs=o)
+	o = Dense(units = max_class_num, activation='softmax')(koktail_embedding_model.output)
+	model_classification = Model(inputs=koktail_embedding_model.input, outputs=o)
 	if gpus is not None:
 		model_classification = multi_gpu_model(model_classification, gpus = gpus)
 	return model_classification, input_data_inf
 
-def train_behaviour_categorization_model(
+def train_koktail_categorization_model(
 	data_attributes,
 	cnn_layers,
 	sqlContext,
@@ -328,7 +328,7 @@ def train_behaviour_categorization_model(
 			class_weight[class_indx] = positive_weight
 	#build the model
 	print('building the model')
-	model, input_data_inf = build_behaviour_categorization_model(
+	model, input_data_inf = build_koktail_categorization_model(
 		data_attributes,
 		cnn_layers,
 		max_class_num = max_class_num, 
@@ -398,7 +398,7 @@ def train_behaviour_categorization_model(
 	print('training time:\t%f scondes'%(time.time()-start_time))
 	return model, input_data_inf
 
-def behaviour_categorization_from_model(
+def koktail_categorization_from_model(
 	test_data_attributes,
 	model_input_data_format,
 	model_weight_file,
@@ -456,11 +456,11 @@ def behaviour_categorization_from_model(
 
 ########similarity############
 
-def build_behaviour_similarity_model(
+def build_koktail_similarity_model(
 	data_attributes,
 	cnn_layers,
-	x_behaviour_attributes,
-	y_behaviour_attributes,
+	x_koktail_attributes,
+	y_koktail_attributes,
 	gpus = None,
 	dropout_rate = 0.3,
 	shared_embedding_layer = True,
@@ -473,45 +473,45 @@ def build_behaviour_similarity_model(
 	construct the attribute list of x and y
 	'''
 	for a1 in data_attributes:
-		for a in x_behaviour_attributes:
+		for a in x_koktail_attributes:
 			if a1['atrribute_name'] == a:
 				x_atttibute.append(a1)
-		for a in y_behaviour_attributes:
+		for a in y_koktail_attributes:
 			if a1['atrribute_name'] == a:
 				y_atttibute.append(a1)
 	'''
 	construct the cnn layers of x and y
 	'''
 	for l in cnn_layers:
-		if set(l) & set(x_behaviour_attributes):
+		if set(l) & set(x_koktail_attributes):
 			x_cnn_layers.append(l)
-		if set(l) & set(y_behaviour_attributes):
+		if set(l) & set(y_koktail_attributes):
 			y_cnn_layers.append(l)
 	'''
 	building the embedding layers
 	'''
-	x_behaviour_embedding_model, x_input_data_inf = build_behaviour_embedding_model(
+	x_koktail_embedding_model, x_input_data_inf = build_koktail_embedding_model(
 		x_atttibute,
 		cnn_layers = x_cnn_layers,
 		dropout_rate = dropout_rate,
 		cnn_layer_num = cnn_layer_num)
-	x_behaviour_embedding_model.name = 'x_behaviour_embedding_model'
-	y_behaviour_embedding_model, y_input_data_inf = build_behaviour_embedding_model(
+	x_koktail_embedding_model.name = 'x_koktail_embedding_model'
+	y_koktail_embedding_model, y_input_data_inf = build_koktail_embedding_model(
 		y_atttibute,
 		cnn_layers = y_cnn_layers,
 		dropout_rate = dropout_rate,
 		cnn_layer_num = cnn_layer_num)
-	y_behaviour_embedding_model.name = 'y_behaviour_embedding_model'
+	y_koktail_embedding_model.name = 'y_koktail_embedding_model'
 	'''
 	building the similarity layers
 	'''
-	x_input = x_behaviour_embedding_model.input
-	y_input = y_behaviour_embedding_model.input
-	x_mebedding = x_behaviour_embedding_model(x_input)
+	x_input = x_koktail_embedding_model.input
+	y_input = y_koktail_embedding_model.input
+	x_mebedding = x_koktail_embedding_model(x_input)
 	if shared_embedding_layer is True:
-		y_mebedding = x_behaviour_embedding_model(y_input)
+		y_mebedding = x_koktail_embedding_model(y_input)
 	else:
-		y_mebedding = y_behaviour_embedding_model(y_input)
+		y_mebedding = y_koktail_embedding_model(y_input)
 	'''
 	similarty score is the inner product of the two embedding vectors
 	'''
@@ -522,10 +522,10 @@ def build_behaviour_similarity_model(
 		outputs = inner_product_layer)
 	return model_similary, x_input_data_inf, y_input_data_inf
 
-def train_behaviour_similary_model(
+def train_koktail_similary_model(
 	data_attributes,
-	x_behaviour_attributes,
-	y_behaviour_attributes,
+	x_koktail_attributes,
+	y_koktail_attributes,
 	cnn_layers,
 	sqlContext,
 	epochs = 4,
@@ -546,11 +546,11 @@ def train_behaviour_similary_model(
 		#build the model
 	'''
 	print('building the model')
-	model, x_input_data_format, y_input_data_format = build_behaviour_similarity_model(
+	model, x_input_data_format, y_input_data_format = build_koktail_similarity_model(
 		data_attributes,
 		cnn_layers,
-		x_behaviour_attributes,
-		y_behaviour_attributes,
+		x_koktail_attributes,
+		y_koktail_attributes,
 		gpus = gpus,
 		dropout_rate = dropout_rate,
 		cnn_layer_num = cnn_layer_num)
@@ -630,7 +630,7 @@ def train_behaviour_similary_model(
 '''
 predict the similarity from the test data
 '''
-def predict_behaviour_similary_from_model(
+def predict_koktail_similary_from_model(
 	model_weight_file,
 	model_structure_json_file,
 	test_data,
@@ -689,7 +689,7 @@ def building_embedding_layer_from_pretrained_model(
 	find the embedding layer
 	'''
 	for l in similarity_model.layers:
-		if l.name == 'x_behaviour_embedding_model':
+		if l.name == 'x_koktail_embedding_model':
 			output_layer = l
 	'''
 	build the model
@@ -762,4 +762,4 @@ def bebaviour_embedding(input,
 	y_vector = emb_model.predict(x)
 	return y_vector[0].tolist()
 
-############jessica_behaviour_dl.py##########
+############jessica_koktail_dl.py##########
