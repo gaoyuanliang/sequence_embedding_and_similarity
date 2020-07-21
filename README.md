@@ -1,6 +1,6 @@
 # Deep sequence embedding for sequence similarity comparison
 
-Training deep learning models for the purpose of sequence similarity comparison, and then use the embedding layers of the similarity model to represent the sequences
+Sequence data is everywhere. Protein structure is a sequence of amino acids, a sentence is a sequence of words, and a person's movement is a sequence of time-location records. How to compare the similarity of two sequences? In this project, I use deep learning models to embed a sequence to a vector, and use the inner product of the two vectors as the similarity score between the two sequences
 
 <img src="https://github.com/gaoyuanliang/sequence_embedding_and_similarity/raw/master/WeChat%20Screenshot_20200717164438.png" width="600">
 
