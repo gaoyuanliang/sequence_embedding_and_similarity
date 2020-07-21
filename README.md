@@ -21,15 +21,12 @@ pip3 install -r requirements.txt
 to use the deep embedding and similarity comparison functions, firstly import the packages
 
 ```python
-
-from jessica_behaviour_dl import *
-from jessica_behaviour_spark import * 
-from jessica_behaviour_local_spark_building import sqlContext
-
+from jessica_koktail_dl import *
+from jessica_koktail_spark import * 
+from jessica_koktail_local_spark_building import sqlContext
 ```
 
 then create the similarity training data and save to a json folder
-
 
 ```python
 
@@ -83,13 +80,13 @@ padding_length = {'x_time':5, 'x_location':5, 'y_time':5, 'y_location':5}
 vacabulary_size = {'x_time':24, 'x_location':100, 'y_time':24, 'y_location':100}
 embedding_dim = {'x_time':20, 'x_location':300, 'y_time':20, 'y_location':300}
 
-training1_data = behaviour_json2npy(
+training1_data = koktail_json2npy(
 	input_json = 'training1.json',
 	output_npy_file_name_prefix = 'training1',
 	sqlContext = sqlContext,
 	padding_length = padding_length,
 	vacabulary_size = vacabulary_size,
-	embedding_dim = embedding_dim)  
+	embedding_dim = embedding_dim)
   ```
   
 the training data attributes looks like 
@@ -111,13 +108,13 @@ the training data attributes looks like
 
 ```python
 
-x_behaviour_attributes = ['x_time', 'x_location']
-y_behaviour_attributes = ['y_time', 'y_location']
+x_sequence_attributes = ['x_time', 'x_location']
+y_sequence_attributes = ['y_time', 'y_location']
 
-model, x_input_data_format, y_input_data_format = train_behaviour_similary_model(
+model, x_input_data_format, y_input_data_format = train_koktail_similary_model(
 	training1_data,
-	x_behaviour_attributes,
-	y_behaviour_attributes,
+	x_sequence_attributes,
+	y_sequence_attributes,
 	cnn_layers,
 	sqlContext,
 	epochs = 500,
@@ -173,7 +170,7 @@ sqlContext.createDataFrame([
 ],
 ['document_id','x_time', 'x_location', 'y_time', 'y_location']).write.mode('Overwrite').json('test.json')
 
-test_data = behaviour_json2npy(
+test_data = koktail_json2npy(
 	input_json = 'test.json',
 	output_npy_file_name_prefix = 'test',
 	sqlContext = sqlContext,
@@ -185,13 +182,14 @@ test_data = behaviour_json2npy(
 predict the similarity
 
 ```python
-y_similarity = predict_behaviour_similary_from_model(
+y_similarity = predict_koktail_similary_from_model(
 	model_weight_file = 'model_similary.h5py',
 	model_structure_json_file = 'model_similary.json',
 	test_data = test_data,
 	x_input_data_format = x_input_data_format,
 	y_input_data_format = y_input_data_format,
-	prediction_json = 'test_prediction.json')
+	prediction_json = 'test_prediction.json',
+	sqlContext = sqlContext)
 
 sqlContext.read.json('test_prediction.json').show()
 ```
@@ -217,11 +215,10 @@ These results are good because the prediction reflects the overlapping timestamp
 firstly build the embedding model from the similarity model
 
 ```python
-
 emb_model = building_embedding_layer_from_pretrained_model(
 	model_weight_file = 'model_similary.h5py',
 	model_structure_json_file = 'model_similary.json',
-	embedding_layer_name = 'x_behaviour_embedding_model',
+	embedding_layer_name = 'x_koktail_embedding_model',
 	emb_model_structure_json = 'emb_model.json',
 	emb_model_weight_file = 'emb_model.h5py')
 ```
@@ -246,22 +243,22 @@ sequence_3 = {'x_time':['t3','t4'], 'x_location':['l3','l4']}
 embed them by the embedding model
 
 ```python
-vector_0 = bebaviour_embedding(
+vector_0 = koktail_embedding(
 	input = sequence_0,
 	x_input_data_format = x_input_data_format,
 	emb_model = emb_model)
 
-vector_1 = bebaviour_embedding(
+vector_1 = koktail_embedding(
 	input = sequence_1,
 	x_input_data_format = x_input_data_format,
 	emb_model = emb_model)
 
-vector_2 = bebaviour_embedding(
+vector_2 = koktail_embedding(
 	input = sequence_2,
 	x_input_data_format = x_input_data_format,
 	emb_model = emb_model)
 
-vector_3 = bebaviour_embedding(
+vector_3 = koktail_embedding(
 	input = sequence_3,
 	x_input_data_format = x_input_data_format,
 	emb_model = emb_model)
