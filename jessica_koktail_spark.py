@@ -1,4 +1,4 @@
-########jessica_behaviour_spark.py#########
+########jessica_koktail_spark.py#########
 import time
 import numpy
 import hashlib
@@ -12,7 +12,7 @@ hash_function = lambda w, num_word_max: (int(hashlib.md5(w.encode('utf-16')).hex
 hash_list = lambda input, num_word_max: [hash_function(r,num_word_max) for r in input]
 
 #padding should be at lest 5
-def behaviour_json2npy(input_json,
+def koktail_json2npy(input_json,
 	output_npy_file_name_prefix,
 	sqlContext,
 	padding_length = {},
@@ -101,4 +101,4 @@ def behaviour_json2npy(input_json,
 	print('running time:\t%f'%(time.time()-s))
 	return output
 
-########jessica_behaviour_spark.py#########
+########jessica_koktail_spark.py#########
