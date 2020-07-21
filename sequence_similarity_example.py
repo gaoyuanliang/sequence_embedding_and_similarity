@@ -192,22 +192,22 @@ sequence_3 = {'x_time':['t3','t4'], 'x_location':['l3','l4']}
 '''
 embed them
 '''
-vector_0 = bebaviour_embedding(
+vector_0 = koktail_embedding(
 	input = sequence_0,
 	x_input_data_format = x_input_data_format,
 	emb_model = emb_model)
 
-vector_1 = bebaviour_embedding(
+vector_1 = koktail_embedding(
 	input = sequence_1,
 	x_input_data_format = x_input_data_format,
 	emb_model = emb_model)
 
-vector_2 = bebaviour_embedding(
+vector_2 = koktail_embedding(
 	input = sequence_2,
 	x_input_data_format = x_input_data_format,
 	emb_model = emb_model)
 
-vector_3 = bebaviour_embedding(
+vector_3 = koktail_embedding(
 	input = sequence_3,
 	x_input_data_format = x_input_data_format,
 	emb_model = emb_model)
