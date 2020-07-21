@@ -754,7 +754,7 @@ def sequence2x(sequence_x,
 '''
 embedding the sequence
 '''
-def bebaviour_embedding(input,
+def koktail_embedding(input,
 	x_input_data_format,
 	emb_model):
 	x = sequence2x(input,
