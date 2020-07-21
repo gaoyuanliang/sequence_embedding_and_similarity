@@ -1,7 +1,7 @@
 ################sequence_similarity_example.py##################
-from jessica_behaviour_dl import *
-from jessica_behaviour_spark import * 
-from jessica_behaviour_local_spark_building import sqlContext
+from jessica_koktail_dl import *
+from jessica_koktail_spark import * 
+from jessica_koktail_local_spark_building import sqlContext
 
 '''
 data and model attributes
@@ -16,8 +16,8 @@ cnn_layers = [
 ['y_time', 'y_location'],
 ]
 
-x_behaviour_attributes = ['x_time', 'x_location']
-y_behaviour_attributes = ['y_time', 'y_location']
+x_sequence_attributes = ['x_time', 'x_location']
+y_sequence_attributes = ['y_time', 'y_location']
 
 
 '''
@@ -41,7 +41,7 @@ sqlContext.read.json('training1.json').show()
 convert data to npy
 '''
 
-training1_data = behaviour_json2npy(
+training1_data = koktail_json2npy(
 	input_json = 'training1.json',
 	output_npy_file_name_prefix = 'training1',
 	sqlContext = sqlContext,
@@ -53,10 +53,10 @@ training1_data = behaviour_json2npy(
 training the initial similarity model
 '''
 
-model, x_input_data_format, y_input_data_format = train_behaviour_similary_model(
+model, x_input_data_format, y_input_data_format = train_koktail_similary_model(
 	training1_data,
-	x_behaviour_attributes,
-	y_behaviour_attributes,
+	x_sequence_attributes,
+	y_sequence_attributes,
 	cnn_layers,
 	sqlContext,
 	epochs = 500,
@@ -87,7 +87,7 @@ sqlContext.createDataFrame([
 
 sqlContext.read.json('training2.json').show()
 
-training2_data = behaviour_json2npy(
+training2_data = koktail_json2npy(
 	input_json = 'training2.json',
 	output_npy_file_name_prefix = 'training2',
 	sqlContext = sqlContext,
@@ -95,10 +95,10 @@ training2_data = behaviour_json2npy(
 	vacabulary_size = vacabulary_size,
 	embedding_dim = embedding_dim)
 
-model, x_input_data_format, y_input_data_format = train_behaviour_similary_model(
+model, x_input_data_format, y_input_data_format = train_koktail_similary_model(
 	training2_data,
-	x_behaviour_attributes,
-	y_behaviour_attributes,
+	x_sequence_attributes,
+	y_sequence_attributes,
 	cnn_layers,
 	sqlContext,
 	epochs = 500,
@@ -131,7 +131,7 @@ sqlContext.createDataFrame([
 
 sqlContext.read.json('test.json').show(100, False)
 
-test_data = behaviour_json2npy(
+test_data = koktail_json2npy(
 	input_json = 'test.json',
 	output_npy_file_name_prefix = 'test',
 	sqlContext = sqlContext,
@@ -139,7 +139,7 @@ test_data = behaviour_json2npy(
 	vacabulary_size = vacabulary_size,
 	embedding_dim = embedding_dim)
 
-y_similarity = predict_behaviour_similary_from_model(
+y_similarity = predict_koktail_similary_from_model(
 	model_weight_file = 'model_similary.h5py',
 	model_structure_json_file = 'model_similary.json',
 	test_data = test_data,
@@ -170,7 +170,7 @@ build the embedding model from the trained similarity model
 emb_model = building_embedding_layer_from_pretrained_model(
 	model_weight_file = 'model_similary.h5py',
 	model_structure_json_file = 'model_similary.json',
-	embedding_layer_name = 'x_behaviour_embedding_model',
+	embedding_layer_name = 'x_koktail_embedding_model',
 	emb_model_structure_json = 'emb_model.json',
 	emb_model_weight_file = 'emb_model.h5py')
 
