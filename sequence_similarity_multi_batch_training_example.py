@@ -92,7 +92,7 @@ model, x_input_data_format, y_input_data_format = train_koktail_similary_model_f
 	y_koktail_attributes = y_sequence_attributes,
 	cnn_layers = cnn_layers,
 	sqlContext = sqlContext,
-	epochs = 1000,
+	epochs = 300,
 	batch_size = 2,
 	model_weight_file = 'model_similary.h5py',
 	model_structure_json_file = 'model_similary.json',
@@ -100,7 +100,6 @@ model, x_input_data_format, y_input_data_format = train_koktail_similary_model_f
 	gpus = None,
 	cnn_layer_num = 1,
 	verbose = 0)
-
 
 '''
 update the model
@@ -111,7 +110,7 @@ model, x_input_data_format, y_input_data_format = train_koktail_similary_model_f
 	y_koktail_attributes = y_sequence_attributes,
 	cnn_layers = cnn_layers,
 	sqlContext = sqlContext,
-	epochs = 1000,
+	epochs = 300,
 	batch_size = 2,
 	model_weight_file = 'model_similary.h5py',
 	model_structure_json_file = 'model_similary.json',
@@ -153,24 +152,25 @@ sqlContext.sql(u"""
 	LEFT JOIN test_prediction
 	ON test_prediction.document_id
 	= training.document_id
+	ORDER BY training.label[0] DESC
 	""").show(100, False)
 
 
 '''
-+-----------+-----+----------------------+
-|document_id|label|prediction            |
-+-----------+-----+----------------------+
-|7          |[0.0]|[8.004955598153174E-4]|
-|8          |[1.0]|[0.8758195638656616]  |
-|9          |[1.0]|[1.0396478176116943]  |
-|10         |[0.0]|[8.004955598153174E-4]|
-|3          |[1.0]|[1.359775185585022]   |
-|4          |[1.0]|[1.8976558446884155]  |
-|5          |[1.0]|[1.523984432220459]   |
-|6          |[0.0]|[1.3594398498535156]  |
-|0          |[2.0]|[1.8696019649505615]  |
-|1          |[2.0]|[1.8981178998947144]  |
-|2          |[2.0]|[1.8972053527832031]  |
-+-----------+-----+----------------------+
++-----------+-----+---------------------+
+|document_id|label|prediction           |
++-----------+-----+---------------------+
+|2          |[2.0]|[1.9239031076431274] |
+|1          |[2.0]|[1.874595046043396]  |
+|0          |[2.0]|[1.8476359844207764] |
+|3          |[1.0]|[1.5352169275283813] |
+|9          |[1.0]|[1.0388445854187012] |
+|4          |[1.0]|[1.8989307880401611] |
+|5          |[1.0]|[1.4943914413452148] |
+|8          |[1.0]|[1.0603625774383545] |
+|7          |[0.0]|[0.03823547437787056]|
+|10         |[0.0]|[0.03823547437787056]|
+|6          |[0.0]|[1.5493112802505493] |
++-----------+-----+---------------------+
 '''
 ######sequence_similarity_multi_batch_training_example.py########
