@@ -762,4 +762,74 @@ def koktail_embedding(input,
 	y_vector = emb_model.predict(x)
 	return y_vector[0].tolist()
 
+def train_koktail_similary_model_from_multi_batchs(
+	input_data_batchs,
+	x_koktail_attributes,
+	y_koktail_attributes,
+	cnn_layers,
+	sqlContext,
+	epochs,
+	batch_size,
+	model_weight_file,
+	model_structure_json_file,
+	dropout_rate = 0.3,
+	gpus = None,
+	cnn_layer_num = 1,
+	verbose = 0, 
+	training_type = 'inital',
+	x_input_data_format = None,
+	y_input_data_format = None):
+	if training_type == 'inital':
+		print('build the inital model from the first batch')
+		training1_data = input_data_batchs[0]
+		model, x_input_data_format, y_input_data_format = train_koktail_similary_model(
+			training1_data,
+			x_koktail_attributes,
+			y_koktail_attributes,
+			cnn_layers,
+			sqlContext,
+			epochs = 1,
+			gpus = gpus,
+			batch_size = batch_size,
+			model_weight_file = model_weight_file,
+			model_structure_json_file = model_structure_json_file,
+			dropout_rate = dropout_rate,
+			cnn_layer_num = cnn_layer_num,
+			training_type = 'initial',
+			verbose = 0)
+	else:
+		print('loading pretrained model')
+		json_file = open(model_structure_json_file, 'r')
+		loaded_model_json = json_file.read()
+		json_file.close()
+		model = model_from_json(loaded_model_json)
+		model.load_weights(model_weight_file)
+		model.compile(loss='mean_squared_error',
+			optimizer='adam',
+			metrics=['mean_squared_error'])
+	print('iterating over the mulit-batch data')
+	for iter in range(epochs):
+		print('starting iteration %d'%iter)
+		for training1_data in input_data_batchs:
+			##
+			x = building_x_from_input_dataformat_and_npy(
+				input_format = x_input_data_format+y_input_data_format,
+				input_data_attributes = training1_data)
+			for f in training1_data:
+				if f['atrribute_name'] == 'label':
+					print('loading label data from %s'%(f['npy_file']))
+					y = np.load(f['npy_file'])
+			model.fit(x, y,
+				batch_size = 3,
+				epochs = 1,
+				verbose = 1)
+		print('complete iteration %d \n'%iter)
+	print('saving model structure to %s'%(model_structure_json_file))
+	model_json = model.to_json()
+	with open(model_structure_json_file, "w") as json_file:
+		json_file.write(model_json)
+	print('saving model weight to  %s'%(model_weight_file))
+	model.save_weights(model_weight_file)
+	return model, x_input_data_format, y_input_data_format
+
 ############jessica_koktail_dl.py##########
