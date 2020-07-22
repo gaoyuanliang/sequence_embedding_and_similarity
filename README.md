@@ -72,6 +72,8 @@ cnn_layers = [
 ]
 ```
 
+<img src="https://github.com/gaoyuanliang/sequence_embedding_and_similarity/raw/master/WeChat%20Screenshot_20200722200050.png" width="600">
+
 also set the embedding parameters of each attribute, and do the conversion
 
 ```python
