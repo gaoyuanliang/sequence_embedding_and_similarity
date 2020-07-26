@@ -303,7 +303,9 @@ similartity between {'x_time': ['t1', 't2'], 'x_location': ['l1', 'l2']} and {'x
 
 it works!
 
-## TODO
+## When my data size is too big
+
+If you data size is so big that you cannot even convert your json file to npy files, you can 
 
 online updating of the similarity model with new batch of data
 
