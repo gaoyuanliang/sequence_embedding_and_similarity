@@ -313,7 +313,7 @@ If you data size is so big that you cannot even convert your json file to npy fi
 
 in this way, in each epoch, the npy files are a load one by one and you will not have the out-of-memory problem.
 
-Examples of my solution is at 
+Examples of my solution is at https://github.com/gaoyuanliang/sequence_embedding_and_similarity/blob/master/sequence_similarity_multi_batch_training_example.py
 
 ## Contact
 
