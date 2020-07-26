@@ -305,9 +305,15 @@ it works!
 
 ## When my data size is too big
 
-If you data size is so big that you cannot even convert your json file to npy files, you can 
+If you data size is so big that you cannot even convert your json file to npy files, or you cannot send the npy data to the model training. My solutino is
 
-online updating of the similarity model with new batch of data
+1. split the big json file into small files, and conver them to npy files one by  one
+
+2. load the npy files one by one to fit the model in each epoch, and repeat the epoches
+
+in this way, in each epoch, the npy files are a load one by one and you will not have the out-of-memory problem.
+
+Examples of my solution is at 
 
 ## Contact
 
